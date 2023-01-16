@@ -247,3 +247,52 @@ ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 plt.savefig("random.png")
 
+from sklearn.datasets import make_classification
+param_grid = {
+    'criterion':['gini', 'entropy', 'log_loss'],
+#     'splitter':['best', 'random'],
+    'max_features': [32],
+    'min_samples_leaf': [4,8],
+    'min_samples_split': [4,8],
+    'max_leaf_nodes':[int(x) for x in np.linspace(4, 8, num = 1)],
+    
+    
+     
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+grid = GridSearchCV(DecisionTreeClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+# fitting the model for grid search 
+# grid.fit(x_train, y_train) 
+grid.fit(x_test, y_test)  
+# print best parameter after tuning 
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions)) 
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
+fig = plt.figure(figsize=(14,7))
+#Generate the confusion matrix
+cf_matrix = confusion_matrix(y_test, grid_predictions)
+ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, 
+            fmt='.2%', cmap='Blues')
+
+
+ax.set_xlabel('\nKlasa predykowana')
+ax.set_ylabel('Klasa rzeczywista ');
+
+## Ticket labels - List must be in alphabetical order
+ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
+ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
+
+
+## Display the visualization of the Confusion Matrix.
+# plt.show()
+
+plt.savefig("decision.png")
+
