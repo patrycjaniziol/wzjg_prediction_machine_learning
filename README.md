@@ -1,5 +1,4 @@
-# Prognozowanie aktywności wrzodziejącego zapalenia jelita grubego na podstawie
-biomarkerów z wykorzystaniem metod uczenia maszynowego
+# Prognozowanie aktywności wrzodziejącego zapalenia jelita grubego na podstawie biomarkerów z wykorzystaniem metod uczenia maszynowego
 # Spis treści
 * [Opis projektu](#opis-projektu)
 * [Technologia](#technologia)
