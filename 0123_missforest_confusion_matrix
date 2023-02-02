@@ -44,7 +44,8 @@ from imblearn.combine import SMOTETomek
 from imblearn.under_sampling import TomekLinks
 from imblearn.over_sampling import BorderlineSMOTE
 from pprint import pprint
-
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -165,24 +166,21 @@ param_grid = {
 X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
 	n_clusters_per_class=1, flip_y=0, random_state=1) 
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
-grid = GridSearchCV(LogisticRegression(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+gridlg = GridSearchCV(LogisticRegression(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
-grid.fit(x_test, y_test)  
-# print best parameter after tuning 
-print(grid.best_params_) 
-grid_predictions = grid.predict(x_test) 
+
+gridlg.fit(x_test, y_test)  
+print(gridlg.best_params_) 
+grid_predictions_lg = gridlg.predict(x_test) 
    
 # print classification report 
-print(classification_report(y_test, grid_predictions)) 
+print(classification_report(y_test, grid_predictions_lg)) 
 
-import seaborn as sns
-from sklearn.metrics import confusion_matrix
+
 
 fig = plt.figure(figsize=(14,7))
 #Generate the confusion matrix
-cf_matrix = confusion_matrix(y_test, grid_predictions)
+cf_matrix = confusion_matrix(y_test, grid_predictions_lg)
 ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, 
             fmt='.2%', cmap='Blues')
 
@@ -194,9 +192,6 @@ ax.set_ylabel('Klasa rzeczywista ');
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
-
-## Display the visualization of the Confusion Matrix.
-# plt.show()
 
 plt.savefig("log.png")
 
@@ -214,10 +209,7 @@ X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redunda
 cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=1)
 grid = GridSearchCV(RandomForestClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
 grid.fit(x_test, y_test)  
-# print best parameter after tuning 
 print(grid.best_params_) 
 grid_predictions = grid.predict(x_test) 
    
@@ -240,10 +232,6 @@ ax.set_ylabel('Klasa rzeczywista ');
 
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
-
-
-## Display the visualization of the Confusion Matrix.
-# plt.show()
 
 plt.savefig("random.png")
 
@@ -264,10 +252,8 @@ X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redunda
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 grid = GridSearchCV(DecisionTreeClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
+ 
 grid.fit(x_test, y_test)  
-# print best parameter after tuning 
 print(grid.best_params_) 
 grid_predictions = grid.predict(x_test) 
    
@@ -286,13 +272,10 @@ ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True,
 ax.set_xlabel('\nKlasa predykowana')
 ax.set_ylabel('Klasa rzeczywista ');
 
-## Ticket labels - List must be in alphabetical order
+
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
-
-## Display the visualization of the Confusion Matrix.
-# plt.show()
 
 plt.savefig("decision.png")
 
@@ -310,10 +293,9 @@ X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redunda
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=0)
 grid = GridSearchCV(ExtraTreesClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
+
 grid.fit(x_test, y_test)  
-# print best parameter after tuning 
+
 print(grid.best_params_) 
 grid_predictions = grid.predict(x_test) 
    
@@ -332,13 +314,12 @@ ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True,
 ax.set_xlabel('\nKlasa predykowana')
 ax.set_ylabel('Klasa rzeczywista ');
 
-## Ticket labels - List must be in alphabetical order
+
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
 
-## Display the visualization of the Confusion Matrix.
-# plt.show()
+
 
 plt.savefig("extra.png")
 
@@ -357,10 +338,9 @@ X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redunda
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
 grid = GridSearchCV(KNeighborsClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
+
 grid.fit(x_test, y_test)  
-# print best parameter after tuning 
+
 print(grid.best_params_) 
 grid_predictions = grid.predict(x_test) 
    
@@ -380,13 +360,12 @@ ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True,
 ax.set_xlabel('\nKlasa predykowana')
 ax.set_ylabel('Klasa rzeczywista ');
 
-## Ticket labels - List must be in alphabetical order
+
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
 
-## Display the visualization of the Confusion Matrix.
-# plt.show()
+
 
 plt.savefig("knn.png")
 
@@ -402,13 +381,13 @@ param_grid = {
 
      
 }
+
 X, y = make_classification(n_samples=256,  n_classes=2, n_features=55, n_redundant=0,
 	n_clusters_per_class=1, flip_y=0, random_state=1) 
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
 grid = GridSearchCV(GradientBoostingClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
+
 grid.fit(x_test, y_test)  
 # print best parameter after tuning 
 print(grid.best_params_) 
@@ -429,13 +408,12 @@ ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True,
 ax.set_xlabel('\nKlasa predykowana')
 ax.set_ylabel('Klasa rzeczywista ');
 
-## Ticket labels - List must be in alphabetical order
+
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
 
-## Display the visualization of the Confusion Matrix.
-# plt.show()
+
 
 plt.savefig("gradient.png")
 
@@ -453,8 +431,7 @@ X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redunda
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
 grid = GridSearchCV(SVC(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
    
-# fitting the model for grid search 
-# grid.fit(x_train, y_train) 
+
 grid.fit(x_test, y_test)  
 # print best parameter after tuning 
 print(grid.best_params_) 
@@ -476,13 +453,12 @@ ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True,
 ax.set_xlabel('\nKlasa predykowana')
 ax.set_ylabel('Klasa rzeczywista ');
 
-## Ticket labels - List must be in alphabetical order
+
 ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 
-## Display the visualization of the Confusion Matrix.
-# plt.show()
+
 
 plt.savefig("ssvc11.png")
 
