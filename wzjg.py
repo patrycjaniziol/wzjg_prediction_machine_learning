@@ -279,3 +279,19 @@ grid_predictions = grid.predict(x_test)
 # print classification report 
 print(classification_report(y_test, grid_predictions)) 
 
+fig = plt.figure(figsize=(14,7))
+#Generate the confusion matrix
+cf_matrix = confusion_matrix(y_test, grid_predictions)
+ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, 
+            fmt='.2%', cmap='Blues')
+
+
+ax.set_xlabel('\nKlasa predykowana')
+ax.set_ylabel('Klasa rzeczywista ');
+
+
+ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
+ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
+
+plt.savefig("extra.png")
+
