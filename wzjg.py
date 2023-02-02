@@ -128,3 +128,10 @@ y = df["Mayo score"]
 
 import seaborn as sns
 sns.countplot(df['Mayo score'])
+
+# Define SMOTE
+# oversample
+oversample = SMOTE()
+X, y = oversample.fit_resample(X, y)
+counter = Counter(y)
+print(counter)
