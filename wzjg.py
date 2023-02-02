@@ -216,3 +216,29 @@ ax.xaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ]) 
 
 plt.savefig("random.png")
+
+from sklearn.datasets import make_classification
+param_grid = {
+    'criterion':['gini', 'entropy', 'log_loss'],
+#     'splitter':['best', 'random'],
+    'max_features': [32],
+    'min_samples_leaf': [4,8],
+    'min_samples_split': [4,8],
+    'max_leaf_nodes':[int(x) for x in np.linspace(4, 8, num = 1)],
+    
+    
+     
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+grid = GridSearchCV(DecisionTreeClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+ 
+grid.fit(x_test, y_test)  
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions)) 
+
