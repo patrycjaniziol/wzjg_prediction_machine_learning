@@ -79,3 +79,9 @@ def random_colors(number_of_colors):
 
 
 warnings.filterwarnings('ignore')
+
+X = df.drop(["Mayo score", "gender"], axis=1)
+y = df["Mayo score"]
+
+import seaborn as sns
+sns.countplot(df['Mayo score'])
