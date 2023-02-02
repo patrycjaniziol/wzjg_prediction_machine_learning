@@ -135,3 +135,11 @@ oversample = SMOTE()
 X, y = oversample.fit_resample(X, y)
 counter = Counter(y)
 print(counter)
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.30, random_state = 101)
+
+scaler = StandardScaler() 
+x_train = scaler.fit_transform(x_train) 
+x_test = scaler.transform(x_test)
