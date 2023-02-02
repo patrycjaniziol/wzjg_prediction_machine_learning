@@ -295,3 +295,26 @@ ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 plt.savefig("extra.png")
 
+param_grid = {
+    'n_neighbors':[int(x) for x in np.linspace(3, 12, num = 1)],
+    'algorithm':[ 'auto','ball_tree', 'kd_tree', 'brute'],
+    'leaf_size':[int(x) for x in np.linspace(2, 10, num = 1)],
+    'p':[1,2],
+    
+    
+     
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
+grid = GridSearchCV(KNeighborsClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+
+grid.fit(x_test, y_test)  
+
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions)) 
+
