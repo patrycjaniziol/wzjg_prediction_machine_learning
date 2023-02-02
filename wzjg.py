@@ -334,3 +334,29 @@ ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 plt.savefig("knn.png")
 
+param_grid = {
+    'loss':['log_loss', 'deviance', 'exponential'],
+    'learning_rate':[0.01,0.1,1],
+    'n_estimators': [int(x) for x in np.linspace(start = 120, stop = 150, num = 10)],
+    'subsample':[0.001,0.01,0.1],
+    'criterion':['friedman_mse', 'squared_error', 'mse'],
+    'min_samples_leaf': [2,4],
+    'min_samples_split': [4,5,6,8],
+
+     
+}
+
+X, y = make_classification(n_samples=256,  n_classes=2, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
+grid = GridSearchCV(GradientBoostingClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+
+grid.fit(x_test, y_test)  
+# print best parameter after tuning 
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions))
+
