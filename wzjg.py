@@ -256,3 +256,26 @@ ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 
 plt.savefig("decision.png")
+
+param_grid = {
+    'n_estimators': [int(x) for x in np.linspace(start = 100, stop = 150, num = 10)],
+    'criterion':['gini', 'entropy', 'log_loss'],
+#     'min_samples_split': [2,4,6,8],
+    'min_samples_leaf': [6,8,12],
+    'max_features': ['auto'],
+     
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=0)
+grid = GridSearchCV(ExtraTreesClassifier(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+
+grid.fit(x_test, y_test)  
+
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions)) 
+
