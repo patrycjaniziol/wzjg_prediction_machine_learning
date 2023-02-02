@@ -377,3 +377,25 @@ ax.yaxis.set_ticklabels(['Mayo 0','Mayo 1','Mayo 2','Mayo 3' ])
 
 plt.savefig("gradient.png")
 
+param_grid = {
+    'C': [0.1, 0.01, 0.001, 0.0001],  
+    'gamma': [0.1, 0.01, 0.001, 0.0001], 
+    'gamma':['scale', 'auto'],
+    'kernel': ['linear', 'poly', 'rbf', 'sigmoid'] 
+    
+    
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
+grid = GridSearchCV(SVC(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+
+grid.fit(x_test, y_test)  
+# print best parameter after tuning 
+print(grid.best_params_) 
+grid_predictions = grid.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions)) 
+
