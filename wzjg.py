@@ -143,3 +143,22 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.30, rand
 scaler = StandardScaler() 
 x_train = scaler.fit_transform(x_train) 
 x_test = scaler.transform(x_test)
+
+from sklearn.datasets import make_classification
+param_grid = {
+    'penalty':['l1', 'l2', 'elasticnet'],
+    'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
+    'C': [0.0001,0.001,0.01,0.1, 1.0]
+}
+X, y = make_classification(n_samples=352,  n_classes=4, n_features=55, n_redundant=0,
+	n_clusters_per_class=1, flip_y=0, random_state=1) 
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+gridlg = GridSearchCV(LogisticRegression(), param_grid,cv=cv, refit = True, verbose = 3,n_jobs=-1) 
+   
+
+gridlg.fit(x_test, y_test)  
+print(gridlg.best_params_) 
+grid_predictions_lg = gridlg.predict(x_test) 
+   
+# print classification report 
+print(classification_report(y_test, grid_predictions_lg)) 
